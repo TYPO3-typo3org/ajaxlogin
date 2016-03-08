@@ -39,61 +39,66 @@ config.tx_extbase {
 }
 
 plugin.tx_ajaxlogin {
-		settings {
-			widgetTypeNum = {$plugin.tx_ajaxlogin.settings.widgetTypeNum}
-			defaultUserGroups = {$plugin.tx_ajaxlogin.settings.defaultUserGroups}
-			defaultUserGroupsAfterVerification = {$plugin.tx_ajaxlogin.settings.defaultUserGroupsAfterVerification}
-			validation {
-				User {
-					name {
-						pattern = {$plugin.tx_ajaxlogin.settings.validation.User.name.pattern}
-						message  = {$plugin.tx_ajaxlogin.settings.validation.User.name.message}
-					}
-					# Currently not used (but extbase default email-address validator)
-					email {
-						pattern = {$plugin.tx_ajaxlogin.settings.validation.User.email.pattern}
-						message  = {$plugin.tx_ajaxlogin.settings.validation.User.email.message}
-					}
-					username {
-						pattern = {$plugin.tx_ajaxlogin.settings.validation.User.username.pattern}
-						message  = {$plugin.tx_ajaxlogin.settings.validation.User.username.message}
-					}
-					password {
-						pattern = {$plugin.tx_ajaxlogin.settings.validation.User.password.pattern}
-						message = {$plugin.tx_ajaxlogin.settings.validation.User.password.message}
-					}
+	settings {
+		widgetTypeNum = {$plugin.tx_ajaxlogin.settings.widgetTypeNum}
+		defaultUserGroups = {$plugin.tx_ajaxlogin.settings.defaultUserGroups}
+		# Groups after the user confirmed by click in email link
+		defaultUserGroupsAfterConfirmation = {$plugin.tx_ajaxlogin.settings.defaultUserGroupsAfterConfirmation}
+		# Groups after an admin approved the user
+		defaultUserGroupsAfterVerification = {$plugin.tx_ajaxlogin.settings.defaultUserGroupsAfterVerification}
+		validation {
+			User {
+				name {
+					pattern = {$plugin.tx_ajaxlogin.settings.validation.User.name.pattern}
+					message  = {$plugin.tx_ajaxlogin.settings.validation.User.name.message}
 				}
-				passwordMinLength = 8
+				# Currently not used (but extbase default email-address validator)
+				email {
+					pattern = {$plugin.tx_ajaxlogin.settings.validation.User.email.pattern}
+					message  = {$plugin.tx_ajaxlogin.settings.validation.User.email.message}
+				}
+				username {
+					pattern = {$plugin.tx_ajaxlogin.settings.validation.User.username.pattern}
+					message  = {$plugin.tx_ajaxlogin.settings.validation.User.username.message}
+				}
+				password {
+					pattern = {$plugin.tx_ajaxlogin.settings.validation.User.password.pattern}
+					message = {$plugin.tx_ajaxlogin.settings.validation.User.password.message}
+				}
 			}
-			notificationMail {
-				sender = {$plugin.tx_ajaxlogin.settings.notificationMail.sender}
-				emailAddress = {$plugin.tx_ajaxlogin.settings.notificationMail.emailAddress}
-			}
-			actionPid {
-				login = {$plugin.tx_ajaxlogin.settings.actionPid.login}
-				show = {$plugin.tx_ajaxlogin.settings.actionPid.show}
-				signUp = {$plugin.tx_ajaxlogin.settings.actionPid.signUp}
-				edit = {$plugin.tx_ajaxlogin.settings.actionPid.edit}
-				editPassword = {$plugin.tx_ajaxlogin.settings.actionPid.editPassword}
-				closeAccount = {$plugin.tx_ajaxlogin.settings.actionPid.closeAccount}
-				enableAccount = {$plugin.tx_ajaxlogin.settings.actionPid.enableAccount}
-				activateAccount = {$plugin.tx_ajaxlogin.settings.actionPid.activateAccount}
-			}
+			passwordMinLength = 8
+		}
+		notificationMail {
+			sender = {$plugin.tx_ajaxlogin.settings.notificationMail.sender}
+			emailAddress = {$plugin.tx_ajaxlogin.settings.notificationMail.emailAddress}
+		}
+		actionPid {
+			login = {$plugin.tx_ajaxlogin.settings.actionPid.login}
+			show = {$plugin.tx_ajaxlogin.settings.actionPid.show}
+			signUp = {$plugin.tx_ajaxlogin.settings.actionPid.signUp}
+			edit = {$plugin.tx_ajaxlogin.settings.actionPid.edit}
+			editPassword = {$plugin.tx_ajaxlogin.settings.actionPid.editPassword}
+			closeAccount = {$plugin.tx_ajaxlogin.settings.actionPid.closeAccount}
+			enableAccount = {$plugin.tx_ajaxlogin.settings.actionPid.enableAccount}
+			activateAccount = {$plugin.tx_ajaxlogin.settings.actionPid.activateAccount}
+		}
 
-			page.passwordChangeSuccess = {$plugin.tx_ajaxlogin.settings.page.passwordChangeSuccess}
-		}
-		persistence {
-				storagePid = {$plugin.tx_ajaxlogin.persistence.storagePid}
-		}
-		features {
-			rewrittenPropertyMapper = 1
-		}
-		view {
-				templateRootPath = {$plugin.tx_ajaxlogin.view.templateRootPath}
-				partialRootPath = {$plugin.tx_ajaxlogin.view.partialRootPath}
-				layoutRootPath = {$plugin.tx_ajaxlogin.view.layoutRootPath}
-		}
+		page.passwordChangeSuccess = {$plugin.tx_ajaxlogin.settings.page.passwordChangeSuccess}
+	}
+	persistence {
+			storagePid = {$plugin.tx_ajaxlogin.persistence.storagePid}
+	}
+	features {
+		rewrittenPropertyMapper = 1
+	}
+	view {
+		templateRootPath = {$plugin.tx_ajaxlogin.view.templateRootPath}
+		partialRootPath = {$plugin.tx_ajaxlogin.view.partialRootPath}
+		layoutRootPath = {$plugin.tx_ajaxlogin.view.layoutRootPath}
+	}
 }
+
+module.tx_ajaxlogin < plugin.tx_ajaxlogin
 
 tx_ajaxlogin_widget = PAGE
 tx_ajaxlogin_widget {

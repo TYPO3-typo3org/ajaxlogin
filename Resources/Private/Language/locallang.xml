@@ -50,9 +50,12 @@
 			<label index="status_loading">Loading</label>
 			<label index="status_authenticated">My account</label>
 			<label index="status_unauthorized">Login</label>
-			
+
 			<label index="resetpassword_notification_subject">Reset your password for %s</label>
 			<label index="resetpassword_notification_sent">An email has been sent to the known email address belonging to your account with further instructions to change your password</label>
+
+			<label index="approve_notification_subject">Your account at %s has been approved</label>
+			<label index="approve_notification_sent">We are happy to inform you about your new account at %s. Your registration was approved by an administrator. You can now log in with your credentials.</label>
 
 			<label index="signup_notification_subject">Registration at %s</label>
 			<label index="signup_notification_sent">Your account is not verified yet. Please check the e-mail we sent you for instructions.</label>
@@ -65,6 +68,7 @@
 			<label index="link_outdated">This link is expired, please reset you password again.</label>
 			<label index="invalid_activation_link">The activation link you have clicked on is no longer valid.</label>
 			<label index="account_activated">Your account has been successfully activated.</label>
+			<label index="account_confirmed">Your account has been successfully confirmed. After an admin has approved your request, you can use your new account.</label>
 			<label index="account_disabled">Your account has been successfully disabled.</label>
 
 			<label index="error_user.name_1221560718">Please fill in your name</label>

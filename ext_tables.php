@@ -81,4 +81,21 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$extensionNam
 t3lib_extMgm::addPiFlexFormValue($extensionName . '_profile', 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/Profile.xml');
 
 t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'AJAX login');
+
+
+Tx_Extbase_Utility_Extension::registerModule(
+	$_EXTKEY,
+	'web',
+	'web_feadmin',
+	'',
+	array(
+		'User' => 'adminModule, approveUser, declineUser'
+	),
+	array(
+		'access' => 'user,group',
+		'icon' => 'EXT:t3skin/icons/module_tools_user.gif',
+		'labels' => 'LLL:EXT:ajaxlogin/Resources/Private/Language/locallang_mod.xml',
+	)
+);
+
 ?>
