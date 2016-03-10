@@ -92,6 +92,37 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 	}
 
 	/**
+	 *
+	 */
+	public function adminModuleAction() {
+		$this->view->assign('users', $this->userRepository->findAllToApprove());
+	}
+
+	/**
+	 * @param int $user
+	 */
+	public function approveUserAction($user) {
+		$user = $this->userRepository->findUserByUid($user);
+		$this->activateAccount($user);
+		$this->sendWelcomeMessage($user);
+		$this->userRepository->_persistAll();
+		$this->forward('adminModule');
+	}
+
+	/**
+	 * @param int $user
+	 *
+	 * @throws Tx_Extbase_MVC_Exception_StopAction
+	 * @throws Tx_Extbase_Persistence_Exception_IllegalObjectType
+	 */
+	public function declineUserAction($user) {
+		$user = $this->userRepository->findUserByUid($user);
+		$this->userRepository->remove($user);
+		$this->userRepository->_persistAll();
+		$this->forward('adminModule');
+	}
+
+	/**
 	 * Displays the logged-in user's info
 	 * or forwards to the login form if a user is not logged in
 	 *
@@ -456,17 +487,14 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		}
 
 		if(!is_null($user)) {
-			$this->activateAccount($user);
+			$this->confirmAccount($user);
 
 			$this->userRepository->update($user);
 			$this->userRepository->_persistAll();
 
 			$this->notifyExchange($user, 'org.typo3.user.register');
 
-				// automatically sign in the user
-			Tx_Ajaxlogin_Utility_FrontendUser::signin($user);
-
-			$message = Tx_Extbase_Utility_Localization::translate('account_activated', 'ajaxlogin');
+			$message = Tx_Extbase_Utility_Localization::translate('account_confirmed', 'ajaxlogin');
 			$this->flashMessageContainer->add($message, '', t3lib_FlashMessage::OK);
 			//$this->redirectToURI('/');
 		} else {
@@ -489,8 +517,49 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 			$user->getUsergroup()->attach($userGroup);
 		}
 
-		$user->setVerificationHash(null);
 		$user->setDisable(false);
+	}
+
+	/**
+	 * confirms a user account
+	 * (does not persist it)
+	 *
+	 * @param Tx_Ajaxlogin_Domain_Model_User $user
+	 */
+	protected function confirmAccount($user) {
+		$userGroups = $this->userGroupRepository->findByUidArray(t3lib_div::intExplode(',', $this->settings['defaultUserGroupsAfterConfirmation']));
+
+		foreach ($userGroups as $userGroup) {
+			$user->getUsergroup()->attach($userGroup);
+		}
+
+		$user->setVerificationHash(null);
+	}
+
+	/**
+	 * send a welcome message to the user.
+	 * This method is called after an admin has approved the account.
+	 *
+	 * @param Tx_Ajaxlogin_Domain_Model_User $user
+	 */
+	protected function sendWelcomeMessage($user) {
+		$this->view->assign('user', $user);
+
+		$emailSubject = Tx_Extbase_Utility_Localization::translate('approve_notification_subject', 'ajaxlogin', array(
+			t3lib_div::getIndpEnv('TYPO3_HOST_ONLY')
+		));
+
+		$emailBodyContent = Tx_Extbase_Utility_Localization::translate('approve_notification_sent', 'ajaxlogin', array(
+			t3lib_div::getIndpEnv('TYPO3_HOST_ONLY')
+		));
+
+		/** @var t3lib_mail_Message $mail */
+		$mail = t3lib_div::makeInstance('t3lib_mail_Message');
+		$mail->setFrom(array($this->settings['notificationMail']['emailAddress'] => $this->settings['notificationMail']['sender']));
+		$mail->setTo(array($user->getEmail() => $user->getName()));
+		$mail->setSubject($emailSubject);
+		$mail->setBody($emailBodyContent);
+		$mail->send();
 	}
 
 	/**
@@ -586,11 +655,6 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 			$user->setPassword($saltedPW);
 			$user->setForgotHash('');
 			$user->setForgotHashValid(0);
-			// activate the account to allow users that could not receive a
-			// verification email to activate their account with the forgot password function
-			if($user->getVerificationHash()) {
-				$this->activateAccount($user);
-			}
 		}
 	}
 

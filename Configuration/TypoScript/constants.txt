@@ -2,6 +2,9 @@ plugin.tx_ajaxlogin {
 		settings {
 			widgetTypeNum = 98987
 			defaultUserGroups = 21
+			# Groups after the user confirmed by click in email link
+			defaultUserGroupsAfterConfirmation = 1
+			# Groups after an admin approved the user
 			defaultUserGroupsAfterVerification = 1
 			validation {
 				User {
