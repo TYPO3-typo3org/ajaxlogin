@@ -31,6 +31,10 @@ plugin.tx_ajaxlogin {
 				sender = TYPO3.org
 				emailAddress = info@typo3.org
 			}
+			webhook {
+				url = WEBHOOK_URL_HERE
+				securityToken = SECURE_TOKEN_HERE
+			}
 			ajaxPid = 0
 			actionPid {
 				login = 0

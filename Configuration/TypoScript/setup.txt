@@ -72,6 +72,10 @@ plugin.tx_ajaxlogin {
 			sender = {$plugin.tx_ajaxlogin.settings.notificationMail.sender}
 			emailAddress = {$plugin.tx_ajaxlogin.settings.notificationMail.emailAddress}
 		}
+		webhook {
+			url = {$plugin.tx_ajaxlogin.settings.webhook.url}
+			securityToken = {$plugin.tx_ajaxlogin.settings.webhook.securityToken}
+		}
 		actionPid {
 			login = {$plugin.tx_ajaxlogin.settings.actionPid.login}
 			show = {$plugin.tx_ajaxlogin.settings.actionPid.show}

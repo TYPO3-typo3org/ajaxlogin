@@ -51,6 +51,31 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 	}
 
 	/**
+	 * @param string $title
+	 * @param string $text
+	 * @param string $color
+	 */
+	protected function sendSlackBotMessage($title, $text, $color = 'notice')
+	{
+		$url = $this->settings['webhook']['url'];
+		$content = json_encode(array(
+			'securityToken' => $this->settings['webhook']['securityToken'],
+			'color' => $color,
+			'title' => $title,
+			'text' => $text
+		));
+		$curl = curl_init($url);
+		curl_setopt($curl, CURLOPT_HEADER, false);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
+
+		curl_exec($curl);
+		curl_close($curl);
+	}
+
+	/**
 	 * converts a user object into a sanitized presentation to push into a message queue
 	 *
 	 * @param Tx_Ajaxlogin_Domain_Model_User $user
@@ -106,6 +131,17 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		$this->activateAccount($user);
 		$this->sendWelcomeMessage($user);
 		$this->userRepository->_persistAll();
+
+		$this->sendSlackBotMessage(
+			'User approved',
+			sprintf(
+				'the user *%s* has been approved by *%s*',
+				$user->getUsername(),
+				$GLOBALS['BE_USER']->user['username']
+			),
+			'ok'
+		);
+
 		$this->forward('adminModule');
 	}
 
@@ -117,8 +153,20 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 	 */
 	public function declineUserAction($user) {
 		$user = $this->userRepository->findUserByUid($user);
+		$username = $user->getUsername();
 		$this->userRepository->remove($user);
 		$this->userRepository->_persistAll();
+
+		$this->sendSlackBotMessage(
+			'User declined',
+			sprintf(
+				'the user *%s* has been declined by *%s*',
+				$username,
+				$GLOBALS['BE_USER']->user['username']
+			),
+			'danger'
+		);
+
 		$this->forward('adminModule');
 	}
 
@@ -534,6 +582,27 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		}
 
 		$user->setVerificationHash(null);
+		$this->sendSlackBotMessage(
+			'New User Registration',
+			sprintf(
+				'new user registered on typo3.org with username: *%s* and IP located in: %s',
+				$user->getUsername(),
+				$this->getLocationByIp()
+			),
+			'notice'
+		);
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getLocationByIp() {
+		$data = file_get_contents('http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR']);
+		if ($data !== FALSE) {
+			$data = json_decode($data, TRUE);
+			return $data['region_name'] . ', ' . $data['country_name'];
+		}
+		return 'unknown';
 	}
 
 	/**
