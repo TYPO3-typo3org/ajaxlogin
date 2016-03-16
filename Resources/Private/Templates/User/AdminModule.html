@@ -8,7 +8,9 @@
 				<tr>
 					<th>Actions</th>
 					<th>UID</th>
+					<th>Created</th>
 					<th>Username</th>
+					<th>Location</th>
 					<th>E-Mail</th>
 					<th>Firstname</th>
 					<th>Lastname</th>
@@ -22,8 +24,10 @@
 							</div>
 						</td>
 						<td>{user.uid}</td>
-						<td>{user.email}</td>
+						<td><f:format.date format="d.m.Y - H:i:s">{user.crdate}</f:format.date></td>
 						<td>{user.username}</td>
+						<td>{user.city}, {user.country}</td>
+						<td>{user.email}</td>
 						<td>{user.firstName}</td>
 						<td>{user.lastName}</td>
 					</tr>
