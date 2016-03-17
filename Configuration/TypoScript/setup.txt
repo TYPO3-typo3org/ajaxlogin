@@ -15,6 +15,7 @@ config.tx_extbase {
 								mapping {
 										tableName = fe_users
 										columns {
+											crdate.mapOnProperty = crdate
 											tx_ajaxlogin_forgotHash.mapOnProperty = forgotHash
 											tx_ajaxlogin_verificationHash.mapOnProperty = verificationHash
 											tx_ajaxlogin_forgotHashValid.mapOnProperty = forgotHashValid

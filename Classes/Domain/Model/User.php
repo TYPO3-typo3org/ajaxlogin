@@ -45,7 +45,12 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 	 * @var DateTime
 	 */
 	protected $forgotHashValid;
-	
+
+	/**
+	 * @var int
+	 */
+	protected $crdate;
+
 	public function __construct($username = '', $password = ''){
 		$this->forgotHashValid = new DateTime();
 		
@@ -108,7 +113,13 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 		return $this->disable;
 	}
 
-
+	/**
+	 * @return int
+	 */
+	public function getCrdate()
+	{
+		return $this->crdate;
+	}
 }
 
 ?>

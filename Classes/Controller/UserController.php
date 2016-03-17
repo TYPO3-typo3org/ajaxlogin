@@ -564,6 +564,8 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		foreach ($userGroups as $userGroup) {
 			$user->getUsergroup()->attach($userGroup);
 		}
+		$user->setCity('');
+		$user->setCountry('');
 
 		$user->setDisable(false);
 	}
@@ -582,27 +584,34 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		}
 
 		$user->setVerificationHash(null);
+		$locationData = $this->getLocationDataByIp();
+		if (empty($locationData)) {
+			$user->setCity($locationData['city']);
+			$user->setCountry($locationData['country_name']);
+		}
+		$mapsLink = '<https://www.google.com/maps/preview/@' . $locationData['latitude'] . ','
+			. $locationData['longitude'] . ',8z|' . $locationData['city'] . ', ' . $locationData['country_name'] .'>';
 		$this->sendSlackBotMessage(
 			'New User Registration',
 			sprintf(
 				'new user registered on typo3.org with username: *%s* and IP located in: %s',
 				$user->getUsername(),
-				$this->getLocationByIp()
+				$mapsLink
 			),
 			'notice'
 		);
 	}
 
 	/**
-	 * @return string
+	 * @return array
 	 */
-	protected function getLocationByIp() {
+	protected function getLocationDataByIp() {
 		$data = file_get_contents('http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR']);
 		if ($data !== FALSE) {
 			$data = json_decode($data, TRUE);
-			return $data['region_name'] . ', ' . $data['country_name'];
+			return $data;
 		}
-		return 'unknown';
+		return array();
 	}
 
 	/**
