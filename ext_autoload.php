@@ -18,6 +18,7 @@ return array(
 	'tx_ajaxlogin_utility_redirecturl' => t3lib_extMgm::extPath('ajaxlogin', 'Classes/Utility/RedirectUrl.php'),
 	'tx_ajaxlogin_utility_typoscript' => t3lib_extMgm::extPath('ajaxlogin', 'Classes/Utility/TypoScript.php'),
 	'tx_ajaxlogin_viewhelpers_formerrorviewhelper' => t3lib_extMgm::extPath('ajaxlogin', 'Classes/ViewHelpers/FormErrorViewHelper.php'),
-	'tx_ajaxlogin_pagenotfoundhandler' => t3lib_extMgm::extPath('ajaxlogin', 'Classes/PageNotFoundHandler.php')
+	'tx_ajaxlogin_pagenotfoundhandler' => t3lib_extMgm::extPath('ajaxlogin', 'Classes/PageNotFoundHandler.php'),
+	'tx_ajaxlogin_tasks_registrationcleanuptask' => t3lib_extMgm::extPath('ajaxlogin', 'Classes/Tasks/RegistrationCleanupTask.php')
 );
 ?>
