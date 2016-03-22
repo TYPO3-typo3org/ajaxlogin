@@ -49,6 +49,11 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 	/**
 	 * @var int
 	 */
+	protected $newUser;
+
+	/**
+	 * @var int
+	 */
 	protected $crdate;
 
 	public function __construct($username = '', $password = ''){
@@ -119,6 +124,20 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 	public function getCrdate()
 	{
 		return $this->crdate;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getNewUser() {
+		return $this->newUser;
+	}
+
+	/**
+	 * @param int $newUser
+	 */
+	public function setNewUser($newUser) {
+		$this->newUser = $newUser;
 	}
 }
 

@@ -8,6 +8,7 @@
 			<label index="fe_users.tx_ajaxlogin_forgotHash">Forgot Password Hash (automatically handled by MD5)</label>
 			<label index="fe_users.tx_ajaxlogin_verificationHash">Account verification hash</label>
 			<label index="fe_users.tx_ajaxlogin_forgotHashValid">Forgot Password Hash is valid until</label>
+			<label index="fe_users.tx_ajaxlogin_newUser">Flag for BE module (1=new user, 0=no new user)</label>
 		</languageKey>
 	</data>
 </T3locallang>

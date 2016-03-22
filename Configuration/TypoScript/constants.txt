@@ -27,6 +27,10 @@ plugin.tx_ajaxlogin {
 					}
 				}
 			}
+			confirmationMail {
+				sender = TYPO3.org
+				emailAddress = confirm-t3o-account@typo3.org
+			}
 			notificationMail {
 				sender = TYPO3.org
 				emailAddress = info@typo3.org

@@ -365,6 +365,8 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		// add a hash to verify the account by sending an e-mail
 		$user->setVerificationHash(md5(t3lib_div::generateRandomBytes(64)));
 		$user->setDisable(true);
+		// set new user flag for BE confirmation module
+		$user->setNewUser(1);
 
 		$this->userRepository->add($user);
 		$this->userRepository->_persistAll();
@@ -543,7 +545,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 			$this->notifyExchange($user, 'org.typo3.user.register');
 
 			$message = Tx_Extbase_Utility_Localization::translate('account_confirmed', 'ajaxlogin');
-			$this->flashMessageContainer->add($message, '', t3lib_FlashMessage::OK);
+			$this->flashMessageContainer->add($message, '', t3lib_FlashMessage::WARNING);
 			//$this->redirectToURI('/');
 		} else {
 			$message = Tx_Extbase_Utility_Localization::translate('invalid_activation_link', 'ajaxlogin');
@@ -566,6 +568,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		}
 		$user->setCity('');
 		$user->setCountry('');
+		$user->setNewUser(0);
 
 		$user->setDisable(false);
 	}
@@ -584,8 +587,9 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		}
 
 		$user->setVerificationHash(null);
+		$this->sendConfirmationMessage($user);
 		$locationData = $this->getLocationDataByIp();
-		if (empty($locationData)) {
+		if (!empty($locationData)) {
 			$user->setCity($locationData['city']);
 			$user->setCountry($locationData['country_name']);
 		}
@@ -612,6 +616,32 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 			return $data;
 		}
 		return array();
+	}
+
+	/**
+	 * send a welcome message to the user.
+	 * This method is called after an admin has approved the account.
+	 *
+	 * @param Tx_Ajaxlogin_Domain_Model_User $user
+	 */
+	protected function sendConfirmationMessage($user) {
+		$this->view->assign('user', $user);
+
+		$emailSubject = Tx_Extbase_Utility_Localization::translate('confirm_notification_subject', 'ajaxlogin', array(
+			t3lib_div::getIndpEnv('TYPO3_HOST_ONLY')
+		));
+
+		$emailBodyContent = Tx_Extbase_Utility_Localization::translate('confirm_notification_sent', 'ajaxlogin', array(
+			t3lib_div::getIndpEnv('TYPO3_HOST_ONLY')
+		));
+
+		/** @var t3lib_mail_Message $mail */
+		$mail = t3lib_div::makeInstance('t3lib_mail_Message');
+		$mail->setFrom(array($this->settings['confirmationMail']['emailAddress'] => $this->settings['confirmationMail']['sender']));
+		$mail->setTo(array($user->getEmail() => $user->getName()));
+		$mail->setSubject($emailSubject);
+		$mail->setBody($emailBodyContent);
+		$mail->send();
 	}
 
 	/**
