@@ -543,7 +543,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 			$this->notifyExchange($user, 'org.typo3.user.register');
 
 			$message = Tx_Extbase_Utility_Localization::translate('account_confirmed', 'ajaxlogin');
-			$this->flashMessageContainer->add($message, '', t3lib_FlashMessage::OK);
+			$this->flashMessageContainer->add($message, '', t3lib_FlashMessage::WARNING);
 			//$this->redirectToURI('/');
 		} else {
 			$message = Tx_Extbase_Utility_Localization::translate('invalid_activation_link', 'ajaxlogin');
