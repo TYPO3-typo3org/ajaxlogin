@@ -54,6 +54,21 @@
 			<label index="resetpassword_notification_subject">Reset your password for %s</label>
 			<label index="resetpassword_notification_sent">An email has been sent to the known email address belonging to your account with further instructions to change your password</label>
 
+			<label index="confirm_notification_subject">typo3.org: Confirmation needed</label>
+			<label index="confirm_notification_sent">Dear typo3.org user,
+
+we have received your request for a typo3.org login account.
+Due to an immensive amount of spam subscriptions, we are currently approving new accounts after manual verification.
+
+For this, we need your confirmation that this account will be used with best intentions.
+You confirm that the account will not be used for spamming any of our services with unrelated or advertising content.
+
+Thanks for your reply.
+
+Best regards
+TYPO3.org web team
+			</label>
+
 			<label index="approve_notification_subject">Your account at %s has been approved</label>
 			<label index="approve_notification_sent">We are happy to inform you about your new account at %s. Your registration was approved by an administrator. You can now log in with your credentials.</label>
 

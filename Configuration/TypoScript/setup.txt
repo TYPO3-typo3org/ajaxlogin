@@ -69,6 +69,10 @@ plugin.tx_ajaxlogin {
 			}
 			passwordMinLength = 8
 		}
+		confirmationMail {
+			sender = {$plugin.tx_ajaxlogin.settings.confirmationMail.sender}
+			emailAddress = {$plugin.tx_ajaxlogin.settings.confirmationMail.emailAddress}
+		}
 		notificationMail {
 			sender = {$plugin.tx_ajaxlogin.settings.notificationMail.sender}
 			emailAddress = {$plugin.tx_ajaxlogin.settings.notificationMail.emailAddress}
