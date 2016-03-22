@@ -365,6 +365,8 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		// add a hash to verify the account by sending an e-mail
 		$user->setVerificationHash(md5(t3lib_div::generateRandomBytes(64)));
 		$user->setDisable(true);
+		// set new user flag for BE confirmation module
+		$user->setNewUser(1);
 
 		$this->userRepository->add($user);
 		$this->userRepository->_persistAll();
@@ -566,6 +568,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		}
 		$user->setCity('');
 		$user->setCountry('');
+		$user->setNewUser(0);
 
 		$user->setDisable(false);
 	}

@@ -123,7 +123,8 @@ class Tx_Ajaxlogin_Domain_Repository_UserRepository extends Tx_Extbase_Domain_Re
 		$constraints = array(
 			$query->equals('deleted', 0),
 			$query->equals('disable', 1),
-			$query->equals('verificationHash', '')
+			$query->equals('verificationHash', ''),
+			$query->equals('newUser', 1)
 		);
 
 		$query->matching($query->logicalAnd($constraints));

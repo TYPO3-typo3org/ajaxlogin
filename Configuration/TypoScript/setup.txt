@@ -19,6 +19,7 @@ config.tx_extbase {
 											tx_ajaxlogin_forgotHash.mapOnProperty = forgotHash
 											tx_ajaxlogin_verificationHash.mapOnProperty = verificationHash
 											tx_ajaxlogin_forgotHashValid.mapOnProperty = forgotHashValid
+											tx_ajaxlogin_newUser.mapOnProperty = newUser
 										}
 								}
 						}

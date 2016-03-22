@@ -33,12 +33,20 @@ $tempColumns = array (
 			'size' => '8',
 			'eval' => 'datetime'
 		)
+	),
+	'tx_ajaxlogin_newUser' => array (
+		'label' => 'LLL:EXT:ajaxlogin/Resources/Private/Language/locallang_db.xml:fe_users.tx_ajaxlogin_newUser',
+		'displayCond' => 'HIDE_FOR_NON_ADMINS',
+		'exclude' => true,
+		'config' => array (
+			'type' => 'check',
+		)
 	)
 );
 
 t3lib_div::loadTCA("fe_users");
 t3lib_extMgm::addTCAcolumns("fe_users", $tempColumns, 1);
-t3lib_extMgm::addToAllTCAtypes('fe_users', '--div--;Ajaxlogin,tx_ajaxlogin_verificationHash,tx_ajaxlogin_forgotHash,tx_ajaxlogin_forgotHashValid');
+t3lib_extMgm::addToAllTCAtypes('fe_users', '--div--;Ajaxlogin,tx_ajaxlogin_verificationHash,tx_ajaxlogin_forgotHash,tx_ajaxlogin_forgotHashValid,tx_ajaxlogin_newUser');
 
 $pagesTempColumns = array (
 	'tx_ajaxlogin_sectionreload' => array (
