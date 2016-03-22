@@ -585,7 +585,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 
 		$user->setVerificationHash(null);
 		$locationData = $this->getLocationDataByIp();
-		if (empty($locationData)) {
+		if (!empty($locationData)) {
 			$user->setCity($locationData['city']);
 			$user->setCountry($locationData['country_name']);
 		}
