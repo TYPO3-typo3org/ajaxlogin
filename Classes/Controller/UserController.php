@@ -585,16 +585,28 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		foreach ($userGroups as $userGroup) {
 			$user->getUsergroup()->attach($userGroup);
 		}
-
+		$mapsLink ='';
 		$user->setVerificationHash(null);
 		$this->sendConfirmationMessage($user);
 		$locationData = $this->getLocationDataByIp();
 		if (!empty($locationData)) {
-			$user->setCity($locationData['city']);
-			$user->setCountry($locationData['country_name']);
+			if ($locationData['error']) {
+				$mapsLink = 'Location could not retrieved.';
+			}
+			else {
+
+				if (isset($locationData['country']['name'])){
+					$mapsLink = $locationData['country']['name'];
+					$user->setCountry($locationData['country']['name']);
+				}
+
+				if (isset($locationData['city']) && $locationData['city']){
+					$mapsLink .= ', ' . $locationData['city'];
+					$user->setCity($locationData['city']);
+				}
+			}
 		}
-		$mapsLink = '<https://www.google.com/maps/preview/@' . $locationData['latitude'] . ','
-			. $locationData['longitude'] . ',8z|' . $locationData['city'] . ', ' . $locationData['country_name'] .'>';
+
 		$this->sendSlackBotMessage(
 			'New User Registration',
 			sprintf(
