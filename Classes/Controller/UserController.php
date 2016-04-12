@@ -612,7 +612,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 	 * @return array
 	 */
 	protected function getLocationDataByIp() {
-		$data = file_get_contents('http://freegeoip.net/json/' . $_SERVER['REMOTE_ADDR']);
+		$data = file_get_contents('http://geoip.nekudo.com/api/' . $_SERVER['REMOTE_ADDR']);
 		if ($data !== FALSE) {
 			$data = json_decode($data, TRUE);
 			return $data;
