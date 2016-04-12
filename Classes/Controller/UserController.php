@@ -590,7 +590,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		$this->sendConfirmationMessage($user);
 		$locationData = $this->getLocationDataByIp();
 		if (!empty($locationData)) {
-			if ($locationData['error']) {
+			if (isset($locationData['error'])) {
 				$mapsLink = 'Location could not retrieved.';
 			}
 			else {
