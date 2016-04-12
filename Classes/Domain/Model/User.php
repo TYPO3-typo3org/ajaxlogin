@@ -134,6 +134,21 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getEmail() {
+		return $this->email;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getName() {
+		return $this->name;
+	}
+
+
+	/**
 	 * @param int $newUser
 	 */
 	public function setNewUser($newUser) {
