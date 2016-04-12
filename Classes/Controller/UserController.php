@@ -598,8 +598,10 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		$this->sendSlackBotMessage(
 			'New User Registration',
 			sprintf(
-				'new user registered on typo3.org with username: *%s* and IP located in: %s',
+				'new user registered on typo3.org with username: *%s* email: *%s* name: *%s* and IP located in: %s',
 				$user->getUsername(),
+				$user->getEmail(),
+				$user->getName(),
 				$mapsLink
 			),
 			'notice'
