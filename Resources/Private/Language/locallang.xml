@@ -68,7 +68,8 @@ Thanks for your reply.
 
 Best regards
 TYPO3.org web team
-			</label>
+
+Given data:</label>
 
 			<label index="scheduler_tx_ajaxlogin_tasks_RegistrationCleanupTask_title">AJAXLOGIN: Reminder for old registrations</label>
 			<label index="scheduler_tx_ajaxlogin_tasks_RegistrationCleanupTask_description">Send slack notification for old registrations (registered between the last 4 and 3 days.</label>

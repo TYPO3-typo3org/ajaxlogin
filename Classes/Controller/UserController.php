@@ -135,8 +135,9 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		$this->sendSlackBotMessage(
 			'User approved',
 			sprintf(
-				'the user *%s* has been approved by *%s*',
+				'the user *%s* with email *%s* has been approved by *%s*',
 				$user->getUsername(),
+				$user->getEmail(),
 				$GLOBALS['BE_USER']->user['username']
 			),
 			'ok'
@@ -160,8 +161,9 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 		$this->sendSlackBotMessage(
 			'User declined',
 			sprintf(
-				'the user *%s* has been declined by *%s*',
+				'the user *%s* with email *%s* has been declined by *%s*',
 				$username,
+				$user->getEmail(),
 				$GLOBALS['BE_USER']->user['username']
 			),
 			'danger'
@@ -649,6 +651,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 			t3lib_div::getIndpEnv('TYPO3_HOST_ONLY')
 		));
 
+		$emailBodyContent .=  $user->getEmail() . ', ' . $user->getName();
 		/** @var t3lib_mail_Message $mail */
 		$mail = t3lib_div::makeInstance('t3lib_mail_Message');
 		$mail->setFrom(array($this->settings['confirmationMail']['emailAddress'] => $this->settings['confirmationMail']['sender']));
