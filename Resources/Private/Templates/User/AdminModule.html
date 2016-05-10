@@ -26,16 +26,22 @@
 						<td>{user.uid}</td>
 						<td><f:format.date format="d.m.Y - H:i:s">{user.crdate}</f:format.date></td>
 						<td>{user.username}</td>
-						<td>{user.city}, {user.country}</td>
+						<td>{user.location}</td>
 						<td>{user.email}</td>
 						<td>{user.firstName}</td>
 						<td>{user.lastName}</td>
 					</tr>
 				</f:for>
 			</table>
+			<h4>Recommendations</h4>
+			<table class="table table-hover table-condensed">
+				<tr class =""></tr>
+			</table>
 		</f:then>
 		<f:else>
 			<p>No open approvals</p>
 		</f:else>
 	</f:if>
+
+
 </f:section>

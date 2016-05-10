@@ -154,6 +154,25 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 	public function setNewUser($newUser) {
 		$this->newUser = $newUser;
 	}
+
+
+	/**
+	 * @return comma separated string of country and city
+	 */
+	public function getLocation()
+	{
+		$location = array();
+
+		if ($this->country) {
+			$location[] = $this->country;
+		}
+
+		if ($this->city) {
+			$location[] = $this->city;
+		}
+
+		return implode(',' , $location);
+	}
 }
 
 ?>
