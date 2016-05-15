@@ -173,6 +173,18 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 
 		return implode(',' , $location);
 	}
+
+	/**
+	 * @return string of the email domain
+	 */
+	public function getEmailDomain() {
+		$emailDomain = '';
+		if ($this->email && strrchr($this->email, "@")) {
+			$emailDomain = substr(strrchr($this->email, "@"), 1);
+		}
+		return $emailDomain;
+	}
+
 }
 
 ?>

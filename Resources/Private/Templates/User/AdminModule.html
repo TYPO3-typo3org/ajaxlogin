@@ -27,7 +27,7 @@
 						<td><f:format.date format="d.m.Y - H:i:s">{user.crdate}</f:format.date></td>
 						<td>{user.username}</td>
 						<td>{user.location}</td>
-						<td>{user.email}</td>
+						<td><f:link.external target="_blank" title="Open in {user.emailDomain} new window" uri="{user.emailDomain}">{user.email}</f:link.external></td>
 						<td>{user.firstName}</td>
 						<td>{user.lastName}</td>
 					</tr>

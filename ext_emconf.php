@@ -2,7 +2,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'AJAX login',
-	'description' => '',
+	'description' => 'Provides views and functions for login for FE Users at typo3.org',
 	'category' => 'fe',
 	'author' => 'Arno Schoon',
 	'author_email' => 'arno@maxserv.nl',
@@ -19,7 +19,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
 	'author_company' => 'MaxServ B.V.',
-	'version' => '1.0.2',
+	'version' => '1.0.3',
 	'constraints' => array(
 		'depends' => array(
 			'extbase' => '1.3.0-0.0.0',
