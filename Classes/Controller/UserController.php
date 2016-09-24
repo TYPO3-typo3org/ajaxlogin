@@ -137,10 +137,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
      */
     public function approveUserAction($user)
     {
-        $user = $this->userRepository->findUserByUid($user);
-        $this->activateAccount($user);
-        $this->sendWelcomeMessage($user);
-        $this->userRepository->_persistAll();
+        $this->doApprovement($user);
 
         $this->sendSlackBotMessage(
             'User approved',
@@ -155,6 +152,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 
         $this->forward('adminModule');
     }
+
 
     /**
      * @param int $user
@@ -635,18 +633,32 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
                 }
             }
         }
+        if ($this->approveUserAutomatically($user)) {
+            $this->sendSlackBotMessage(
+                'New user auto approvment ',
+                sprintf(
+                    'new user registered on typo3.org with username: *%s* email: *%s* name: *%s* and IP located in: %s was auto approved',
+                    $user->getUsername(),
+                    $user->getEmail(),
+                    $user->getName(),
+                    $mapsLink
+                ),
+                'info'
+            );
 
-        $this->sendSlackBotMessage(
-            'New User Registration',
-            sprintf(
-                'new user registered on typo3.org with username: *%s* email: *%s* name: *%s* and IP located in: %s',
-                $user->getUsername(),
-                $user->getEmail(),
-                $user->getName(),
-                $mapsLink
-            ),
-            'notice'
-        );
+        } else {
+            $this->sendSlackBotMessage(
+                'New User Registration',
+                sprintf(
+                    'new user registered on typo3.org with username: *%s* email: *%s* name: *%s* and IP located in: %s',
+                    $user->getUsername(),
+                    $user->getEmail(),
+                    $user->getName(),
+                    $mapsLink
+                ),
+                'notice'
+            );
+        }
     }
 
     /**
@@ -1000,5 +1012,60 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
     protected function getFormToken()
     {
         return 'tx-ajaxlogin-form' . md5(microtime());
+    }
+
+    /**
+     *  checks if the user belongs to a whitlisted domain
+     *
+     * @param Tx_Ajaxlogin_Domain_Model_User $user
+     *
+     * @return bool true, if domain is whitelisted
+     */
+    protected function approveUserAutomatically($user)
+    {
+
+        // get configuration
+        $whitelistDomainsAllowed = t3lib_div::trimExplode(',',
+            $this->settings['autoApprovement']['whitelistDomains']['allowTopLevelDomains']);
+
+        $whitelistDomainsExceptions = t3lib_div::trimExplode(',',
+            $this->settings['autoApprovement']['whitelistDomains']['exceptions']);
+
+        // could be used for automatically denyments
+        #$blacklistDomains = t3lib_div::trimExplode(',', $this->settings['autoApprovement']['blacklistDomains']);
+
+        // get domain from user
+
+        $host_names = explode(".", $user->getEmailDomain());
+
+        $userTopLevelDomain = '.' . end($host_names);
+
+        // check if user domain is allowed
+        if (in_array($userTopLevelDomain, $whitelistDomainsAllowed)) {
+            // check if the domain has a restriction
+
+            if (in_array($user->getEmailDomain(), $whitelistDomainsExceptions)) {
+                return false;
+            }
+            $this->doApprovement($user);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Tx_Ajaxlogin_Domain_Model_User $user
+     * @return bool
+     */
+    protected function doApprovement($user)
+    {
+        $user = $this->userRepository->findUserByUid($user);
+        $this->activateAccount($user);
+        $this->sendWelcomeMessage($user);
+        $this->userRepository->_persistAll();
+
+        return true;
     }
 }

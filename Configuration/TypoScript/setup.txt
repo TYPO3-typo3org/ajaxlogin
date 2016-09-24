@@ -93,9 +93,19 @@ plugin.tx_ajaxlogin {
 			activateAccount = {$plugin.tx_ajaxlogin.settings.actionPid.activateAccount}
 		}
 
-		page.termsAndConditions = 930
+		page {
+			termsAndConditions = 930
+			passwordChangeSuccess = {$plugin.tx_ajaxlogin.settings.page.passwordChangeSuccess}
+		}
 
-		page.passwordChangeSuccess = {$plugin.tx_ajaxlogin.settings.page.passwordChangeSuccess}
+		autoApprovement {
+			whitelistDomains {
+			  allowTopLevelDomains = .de, .nl, .ch, .at
+			  exceptions = bluewin.ch
+			}
+			blacklistDomains =
+		}
+
 
 	}
 	persistence {
