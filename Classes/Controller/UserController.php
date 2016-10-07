@@ -133,24 +133,29 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
     }
 
     /**
-     * @param int $userUid
+     *
+     * @param int $user
      */
-    public function approveUserAction($userUid)
+    public function approveUserAction($user)
     {
-        $this->doApprovement($userUid);
-        /** @var Tx_Ajaxlogin_Domain_Model_User $user */
-        $user = $this->userRepository->findUserByUid($userUid);
+        $userUid = $user;
+        $user = $this->doApprovement($user);
 
-        $this->sendSlackBotMessage(
-            'User approved',
-            sprintf(
-                'the user *%s* with email *%s* has been approved by *%s*',
-                $user->getUsername(),
-                $user->getEmail(),
-                $GLOBALS['BE_USER']->user['username']
-            ),
-            'ok'
-        );
+        if ($user) {
+            $this->sendSlackBotMessage(
+                'User approved',
+                sprintf(
+                    'the user *%s* with email *%s* has been approved by *%s*',
+                    $user->getUsername(),
+                    $user->getEmail(),
+                    $GLOBALS['BE_USER']->user['username']
+                ),
+                'ok'
+            );
+        } else {
+            $this->flashMessageContainer->add('No user was found for the given uid: ' . $userUid,
+                'User Approvement failed', t3lib_FlashMessage::ERROR);
+        }
 
         $this->forward('adminModule');
     }
@@ -563,15 +568,20 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
         }
 
         if (!is_null($user)) {
-            $this->confirmAccount($user);
+            if ($this->confirmAccount($user)) {
+                $message = Tx_Extbase_Utility_Localization::translate('account_activated', 'ajaxlogin');
+                $this->flashMessageContainer->add($message, '', t3lib_FlashMessage::OK);
+
+            } else {
+                $message = Tx_Extbase_Utility_Localization::translate('account_confirmed', 'ajaxlogin');
+                $this->flashMessageContainer->add($message, '', t3lib_FlashMessage::WARNING);
+            }
 
             $this->userRepository->update($user);
             $this->userRepository->_persistAll();
 
             $this->notifyExchange($user, 'org.typo3.user.register');
 
-            $message = Tx_Extbase_Utility_Localization::translate('account_confirmed', 'ajaxlogin');
-            $this->flashMessageContainer->add($message, '', t3lib_FlashMessage::WARNING);
             //$this->redirectToURI('/');
         } else {
             $message = Tx_Extbase_Utility_Localization::translate('invalid_activation_link', 'ajaxlogin');
@@ -606,6 +616,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
      * (does not persist it)
      *
      * @param Tx_Ajaxlogin_Domain_Model_User $user
+     * @return bool true on autoactivation, false if not autoactivated
      */
     protected function confirmAccount($user)
     {
@@ -617,7 +628,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
         }
         $mapsLink = '';
         $user->setVerificationHash(null);
-        $this->sendConfirmationMessage($user);
+
         $locationData = $this->getLocationDataByIp();
         if (!empty($locationData)) {
             if (isset($locationData['error'])) {
@@ -647,8 +658,10 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
                 ),
                 'info'
             );
+            return true;
 
         } else {
+            $this->sendConfirmationMessage($user);
             $this->sendSlackBotMessage(
                 'New User Registration',
                 sprintf(
@@ -660,6 +673,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
                 ),
                 'notice'
             );
+            return false;
         }
     }
 
@@ -1049,25 +1063,31 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
             if (in_array($user->getEmailDomain(), $whitelistDomainsExceptions)) {
                 return false;
             }
-            $this->doApprovement($user);
-
-            return true;
+            if ($this->doApprovement($user->getUid())) {
+                return true;
+            }
         }
 
         return false;
     }
 
     /**
-     * @param Tx_Ajaxlogin_Domain_Model_User $user
-     * @return bool
+     * @param int $user
+     * @return mixed
      */
     protected function doApprovement($user)
     {
         $user = $this->userRepository->findUserByUid($user);
-        $this->activateAccount($user);
-        $this->sendWelcomeMessage($user);
-        $this->userRepository->_persistAll();
 
-        return true;
+        if ($user) {
+            $this->activateAccount($user);
+            $this->sendWelcomeMessage($user);
+            $this->userRepository->_persistAll();
+
+            return $user;
+        }
+
+        return false;
+
     }
 }
