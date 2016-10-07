@@ -64,10 +64,13 @@ Due to an immensive amount of spam subscriptions, we are currently approving new
 
 You confirm that the account will not be used for spamming any of our services with unrelated or advertising content.
 
-Thanks for your reply.
+Thanks for your reply.Kind regards,
 
-Best regards
-TYPO3.org web team
+The TYPO3.org Team
+
+
+------------------------------------------------------------------
+TYPO3 Association, Sihlbruggstrasse 105, CH-6340 Baar, Switzerland
 
 Given data:</label>
 
@@ -75,7 +78,16 @@ Given data:</label>
 			<label index="scheduler_tx_ajaxlogin_tasks_RegistrationCleanupTask_description">Send slack notification for old registrations (registered between the last 4 and 3 days.</label>
 
 			<label index="approve_notification_subject">Your account at %s has been approved</label>
-			<label index="approve_notification_sent">We are happy to inform you about your new account at %s. Your registration was approved by an administrator. You can now log in with your credentials.</label>
+			<label index="approve_notification_sent">We are happy to inform you about your new account at %s. Your registration was approved by an administrator. You can now log in with your credentials.
+
+Kind regards,
+The TYPO3.org Team
+
+
+------------------------------------------------------------------
+TYPO3 Association, Sihlbruggstrasse 105, CH-6340 Baar, Switzerland
+
+			</label>
 
 			<label index="signup_notification_subject">Registration at %s</label>
 			<label index="signup_notification_sent">Your account is not verified yet. Please check the e-mail we sent you for instructions.</label>
