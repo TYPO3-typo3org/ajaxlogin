@@ -94,7 +94,7 @@ plugin.tx_ajaxlogin {
 		}
 
 		page {
-			termsAndConditions = 930
+			termsAndConditions = 155
 			passwordChangeSuccess = {$plugin.tx_ajaxlogin.settings.page.passwordChangeSuccess}
 		}
 
