@@ -133,11 +133,13 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
     }
 
     /**
-     * @param int $user
+     * @param int $userUid
      */
-    public function approveUserAction($user)
+    public function approveUserAction($userUid)
     {
-        $this->doApprovement($user);
+        $this->doApprovement($userUid);
+        /** @var Tx_Ajaxlogin_Domain_Model_User $user */
+        $user = $this->userRepository->findUserByUid($userUid);
 
         $this->sendSlackBotMessage(
             'User approved',
