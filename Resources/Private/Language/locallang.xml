@@ -100,7 +100,12 @@ TYPO3 Association, Sihlbruggstrasse 105, CH-6340 Baar, Switzerland
 			<label index="link_outdated">This link is expired, please reset you password again.</label>
 			<label index="invalid_activation_link">The activation link you have clicked on is no longer valid.</label>
 			<label index="account_activated">Your account has been successfully activated.</label>
-			<label index="account_confirmed">Your account has been successfully confirmed. After an admin has approved your request, you can use your new account.</label>
+			<label index="account_confirmed">You successfully confirmed your account.
+
+We are currently approving new accounts only after manual verification. Respond to verification e-mail within the next 3 days and confirm that your account will not be used for spamming any of our services with unrelated or advertising content.
+
+After an administiration has approved your request, you can use your new account. </label>
+			<label index="account_confirmation_needed">Confirmation needed</label>
 			<label index="account_disabled">Your account has been successfully disabled.</label>
 
 			<label index="error_user.name_1221560718">Please fill in your name</label>

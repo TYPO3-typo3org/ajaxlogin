@@ -574,7 +574,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 
             } else {
                 $message = Tx_Extbase_Utility_Localization::translate('account_confirmed', 'ajaxlogin');
-                $this->flashMessageContainer->add($message, '', t3lib_FlashMessage::WARNING);
+                $this->flashMessageContainer->add($message, Tx_Extbase_Utility_Localization::translate('account_confirmation_needed', 'ajaxlogin'), t3lib_FlashMessage::WARNING);
             }
 
             $this->userRepository->update($user);
