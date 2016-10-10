@@ -648,7 +648,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
         }
         if ($this->approveUserAutomatically($user)) {
             $this->sendSlackBotMessage(
-                'New user auto approvment ',
+                'New user auto approvement',
                 sprintf(
                     'new user registered on typo3.org with username: *%s* email: *%s* name: *%s* and IP located in: %s was auto approved',
                     $user->getUsername(),
