@@ -4,6 +4,11 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 {
 
     /**
+     * @var Tx_T3oLdap_Connectors_Ldap
+     */
+    private $ldap;
+
+    /**
      * @var Tx_Ajaxlogin_Domain_Repository_UserRepository
      */
     protected $userRepository;
@@ -17,6 +22,14 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
      * @var Tx_Ajaxlogin_Domain_Repository_CountryRepository
      */
     protected $countryRepository;
+
+    /**
+     * Tx_Ajaxlogin_Controller_UserController constructor.
+     */
+    public function __construct()
+    {
+        $this->ldap = t3lib_div::makeInstance('Tx_T3oLdap_Connectors_Ldap');
+    }
 
     /**
      * Initializes the controller before invoking an action method.
@@ -173,6 +186,9 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
         $username = $user->getUsername();
         $this->userRepository->remove($user);
         $this->userRepository->_persistAll();
+
+        // TODO: Does this have negative effects on other systems?
+        $this->ldap->deleteUser($user->getUsername());
 
         $this->sendSlackBotMessage(
             'User declined',
@@ -377,9 +393,9 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
         $userGroups = $this->userGroupRepository->findByUidArray(t3lib_div::intExplode(',',
             $this->settings['defaultUserGroups']));
 
-        $password = $user->getPassword();
+        $cleartextPassword = $user->getPassword();
 
-        $password = Tx_Ajaxlogin_Utility_Password::salt($password);
+        $password = Tx_Ajaxlogin_Utility_Password::salt($cleartextPassword);
 
         foreach ($userGroups as $userGroup) {
             $user->getUsergroup()->attach($userGroup);
@@ -395,6 +411,9 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 
         $this->userRepository->add($user);
         $this->userRepository->_persistAll();
+
+        // Create the user account
+        $this->ldap->createUser($user->getUid(), array(), $cleartextPassword);
 
         $message = Tx_Extbase_Utility_Localization::translate('signup_successful', 'ajaxlogin');
         $this->flashMessageContainer->add($message, '', t3lib_FlashMessage::OK);
@@ -580,6 +599,9 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
             $this->userRepository->update($user);
             $this->userRepository->_persistAll();
 
+            // Enable LDAP Account
+            $this->ldap->enableUser($user->getUsername());
+
             $this->notifyExchange($user, 'org.typo3.user.register');
 
             //$this->redirectToURI('/');
@@ -609,6 +631,10 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
         $user->setNewUser(0);
 
         $user->setDisable(false);
+
+        // Enable LDAP Account
+        $this->ldap->enableUser($user->getUsername());
+
     }
 
     /**
@@ -989,6 +1015,25 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
             $encryptedPassword = $currentUser->getPassword();
 
             if (Tx_Ajaxlogin_Utility_Password::validate($plainTextPassword, $encryptedPassword)) {
+
+                /**
+                 * Update LDAP Passwords for given user. Will create the account in LDAP
+                 * if no exists. Otherwise, only password will be updated.
+                 *
+                 * @var Tx_T3oLdap_Utility_PasswordUpdate $ldapPasswordUtility
+                 */
+                if ($this->ldap->userExists($currentUser->getUsername()) === true) {
+                    $ldapPasswordUtility = t3lib_div::makeInstance('Tx_T3oLdap_Utility_PasswordUpdate');
+                    $ldapPasswordUtility->updatePassword($currentUser->getUsername(), $password['new']);
+                } else {
+                    // Create the user record in LDAP
+                    $this->ldap->createUser(
+                        $currentUser->getUid(),
+                        array(),
+                        $password['new']
+                    );
+                }
+
                 $saltedPassword = Tx_Ajaxlogin_Utility_Password::salt($password['new']);
                 $currentUser->setPassword($saltedPassword);
 
@@ -1083,6 +1128,9 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
             $this->activateAccount($user);
             $this->sendWelcomeMessage($user);
             $this->userRepository->_persistAll();
+
+            // Enable LDAP Account
+            $this->ldap->enableUser($user->getUsername());
 
             return $user;
         }
