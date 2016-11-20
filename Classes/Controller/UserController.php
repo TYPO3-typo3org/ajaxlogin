@@ -583,6 +583,26 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
             }
         }
 
+        if ($this->isT3oLdapAvailable) {
+            $userArray = array(
+                'username' => $currentUser->getUsername(),
+                'first_name' => $currentUser->getFirstName(),
+                'last_name' => $currentUser->getLastName(),
+                'name' => $currentUser->getName(),
+                'address' => $currentUser->getAddress(),
+                'zip' => $currentUser->getZip(),
+                'city' => $currentUser->getCity(),
+                'country' => $currentUser->getCountry(),
+                'email' => $currentUser->getEmail(),
+                'telephone' => $currentUser->getTelephone(),
+                'fax' => $currentUser->getFax(),
+                'www' => $currentUser->getWww(),
+                // you need to send the password to update LDAP record
+                'password' => $currentUser->getPassword()
+            );
+            $this->ldap->updateUser($userArray);
+        }
+
         $this->userRepository->update($user);
         $this->flashMessageContainer->add('User updated');
         $this->forward('show');
