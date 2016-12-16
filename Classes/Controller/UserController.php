@@ -322,7 +322,14 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
         $this->view->assign('formToken', $token);
         $this->response->setHeader('X-Ajaxlogin-formToken', $token);
 
-        $this->view->assign('user', $user);
+        if ($user === null) {
+        	$user = $this->objectManager->get('Tx_Ajaxlogin_Domain_Model_User');
+        }
+
+		// unset checkbox for terms and conditions
+		$user->setAcceptedTermsAndConditions(FALSE);
+
+		$this->view->assign('user', $user);
     }
 
     /**
@@ -351,6 +358,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
         $emailError = t3lib_div::makeInstance('Tx_Extbase_Validation_PropertyError', 'email');
         $usernameError = t3lib_div::makeInstance('Tx_Extbase_Validation_PropertyError', 'username');
         $passwordError = t3lib_div::makeInstance('Tx_Extbase_Validation_PropertyError', 'password');
+		$termsAndConditionsError = t3lib_div::makeInstance('Tx_Extbase_Validation_PropertyError', 'acceptedTermsAndConditions');
 
         $checkEmail = $this->userRepository->findOneByEmail($user->getEmail());
         $checkUsername = $this->userRepository->findOneByUsername($user->getUsername());
@@ -373,6 +381,12 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
             ));
         }
 
+        if ($user->getAcceptedTermsAndConditions() === FALSE) {
+            $termsAndConditionsError->addErrors(array(
+                t3lib_div::makeInstance('Tx_Extbase_Error_Error', 'You did not accept our terms and conditions', 1481809833739)
+            ));
+        }
+
         if (count($emailError->getErrors())) {
             $objectError->addErrors(array(
                 $emailError
@@ -388,6 +402,12 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
         if (count($passwordError->getErrors())) {
             $objectError->addErrors(array(
                 $passwordError
+            ));
+        }
+
+        if (count($termsAndConditionsError->getErrors())) {
+            $objectError->addErrors(array(
+                $termsAndConditionsError
             ));
         }
 

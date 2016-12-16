@@ -41,12 +41,19 @@ $tempColumns = array (
 		'config' => array (
 			'type' => 'check',
 		)
+	),
+	'accepted_terms_and_conditions' => array (
+		'label' => 'LLL:EXT:ajaxlogin/Resources/Private/Language/locallang_db.xml:fe_users.accepted_terms_and_conditions',
+		'exclude' => true,
+		'config' => array (
+			'type' => 'check',
+		)
 	)
 );
 
 t3lib_div::loadTCA("fe_users");
 t3lib_extMgm::addTCAcolumns("fe_users", $tempColumns, 1);
-t3lib_extMgm::addToAllTCAtypes('fe_users', '--div--;Ajaxlogin,tx_ajaxlogin_verificationHash,tx_ajaxlogin_forgotHash,tx_ajaxlogin_forgotHashValid,tx_ajaxlogin_newUser');
+t3lib_extMgm::addToAllTCAtypes('fe_users', '--div--;Ajaxlogin,tx_ajaxlogin_verificationHash,tx_ajaxlogin_forgotHash,tx_ajaxlogin_forgotHashValid,tx_ajaxlogin_newUser,accepted_terms_and_conditions');
 
 $pagesTempColumns = array (
 	'tx_ajaxlogin_sectionreload' => array (

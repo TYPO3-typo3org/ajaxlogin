@@ -1,13 +1,13 @@
 <?php
 
 class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUser {
-	
+
 	/**
 	 * @var string
 	 * @validate Tx_Ajaxlogin_Domain_Validator_CustomRegularExpressionValidator(object = User, property = name)
 	 */
 	protected $name;
-	
+
 	/**
 	 * @var boolean
 	 */
@@ -18,29 +18,29 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 	 * @validate EmailAddress
 	 */
 	protected $email;
-	
+
 	/**
 	 * @var string
 	 * @validate Tx_Ajaxlogin_Domain_Validator_CustomRegularExpressionValidator(object = User, property = username)
 	 */
 	protected $username;
-	
+
 	/**
 	 * @var string
 	 * @validate Tx_Ajaxlogin_Domain_Validator_CustomRegularExpressionValidator(object = User, property = password)
 	 */
 	protected $password;
-	
+
 	/**
 	 * @var string
 	 */
 	protected $forgotHash;
-	
+
 	/**
 	 * @var string
 	 */
 	protected $verificationHash;
-	
+
 	/**
 	 * @var DateTime
 	 */
@@ -56,47 +56,52 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 	 */
 	protected $crdate;
 
+	/**
+	 * @var boolean
+	 */
+	protected $acceptedTermsAndConditions = FALSE;
+
 	public function __construct($username = '', $password = ''){
 		$this->forgotHashValid = new DateTime();
-		
+
 		parent::__construct($username, $password);
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getForgotHash() {
 		return $this->forgotHash;
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getVerificationHash() {
 		return $this->verificationHash;
 	}
-	
+
 	/**
 	 * @return string
 	 */
 	public function getForgotHashValid() {
 		return $this->forgotHashValid;
 	}
-	
+
 	/**
 	 * @param string
 	 */
 	public function setVerificationHash($verificationHash) {
 		$this->verificationHash = $verificationHash;
 	}
-	
+
 	/**
 	 * @param string
 	 */
 	public function setForgotHash($forgotHash) {
 		$this->forgotHash = $forgotHash;
 	}
-	
+
 	/**
 	 * @param DateTime
 	 */
@@ -139,7 +144,7 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 	public function getEmail() {
 		return $this->email;
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -155,6 +160,20 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 		$this->newUser = $newUser;
 	}
 
+	/**
+	 * @return boolean
+	 */
+	public function getAcceptedTermsAndConditions() {
+		return $this->acceptedTermsAndConditions;
+	}
+
+	/**
+	 * @param boolean $acceptedTermsAndConditions
+	 * @return void
+	 */
+	public function setAcceptedTermsAndConditions($acceptedTermsAndConditions) {
+		$this->acceptedTermsAndConditions = (boolean)$acceptedTermsAndConditions;
+	}
 
 	/**
 	 * @return comma separated string of country and city
