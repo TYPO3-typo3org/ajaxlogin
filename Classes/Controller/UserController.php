@@ -622,6 +622,9 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
                 'telephone' => $currentUser->getTelephone(),
                 'fax' => $currentUser->getFax(),
                 'www' => $currentUser->getWww(),
+                'accepted_terms_and_conditions' => $currentUser->getAcceptedTermsAndConditions(),
+                'tac_version' => $currentUser->getTacVersion(),
+                'tac_date_of_acceptance' => $currentUser->getTacDateOfAcceptance()->getTimestamp(),
                 // you need to send the password to update LDAP record
                 'password' => $currentUser->getPassword()
             );

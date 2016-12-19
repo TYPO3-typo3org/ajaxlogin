@@ -55,7 +55,6 @@ $tempColumns = array (
 		'config' => array (
 			'type' => 'input',
 			'size' => 32,
-			'readOnly' => TRUE,
 		)
 	),
 	'tac_date_of_acceptance' => array (
