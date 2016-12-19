@@ -6,7 +6,9 @@ CREATE TABLE fe_users (
 	tx_ajaxlogin_verificationHash  varchar(80) DEFAULT '' NOT NULL,
 	tx_ajaxlogin_forgotHashValid int(11) DEFAULT '0' NOT NULL,
 	tx_ajaxlogin_newUser int(11) DEFAULT '0' NOT NULL,
-	accepted_terms_and_conditions tinyint(4) DEFAULT '0' NOT NULL
+	accepted_terms_and_conditions tinyint(4) DEFAULT '0' NOT NULL,
+	tac_version varchar(80) DEFAULT '' NOT NULL,
+	tac_date_of_acceptance int(11) DEFAULT '0' NOT NULL
 );
 #
 # Table structure for table 'pages'

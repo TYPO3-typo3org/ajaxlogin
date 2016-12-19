@@ -61,8 +61,19 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 	 */
 	protected $acceptedTermsAndConditions = FALSE;
 
+	/**
+	 * @var string
+	 */
+	protected $tacVersion = '';
+
+	/**
+	 * @var \DateTime;
+	 */
+	protected $tacDateOfAcceptance = NULL;
+
 	public function __construct($username = '', $password = ''){
 		$this->forgotHashValid = new DateTime();
+		$this->tacDateOfAcceptance = new \DateTime();
 
 		parent::__construct($username, $password);
 	}
@@ -174,6 +185,36 @@ class Tx_Ajaxlogin_Domain_Model_User extends Tx_Extbase_Domain_Model_FrontendUse
 	public function setAcceptedTermsAndConditions($acceptedTermsAndConditions) {
 		$this->acceptedTermsAndConditions = (boolean)$acceptedTermsAndConditions;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getTacVersion() {
+		return $this->tacVersion;
+	}
+
+	/**
+	 * @param string $tacVersion
+	 * @return void
+	 */
+	public function setTacVersion($tacVersion) {
+		$this->tacVersion = (string)$tacVersion;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getTacDateOfAcceptance() {
+		return $this->tacDateOfAcceptance;
+	}
+
+	/**
+	 * @param \DateTime $tacDateOfAcceptance
+	 * @return void
+	 */
+	public function setTacDateOfAcceptance(\DateTime $tacDateOfAcceptance) {
+		$this->tacDateOfAcceptance = $tacDateOfAcceptance;
+}
 
 	/**
 	 * @return comma separated string of country and city

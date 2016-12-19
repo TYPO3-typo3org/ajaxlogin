@@ -48,12 +48,30 @@ $tempColumns = array (
 		'config' => array (
 			'type' => 'check',
 		)
+	),
+	'tac_version' => array (
+		'label' => 'LLL:EXT:ajaxlogin/Resources/Private/Language/locallang_db.xml:fe_users.tac_version',
+		'exclude' => true,
+		'config' => array (
+			'type' => 'input',
+			'size' => 32,
+			'readOnly' => TRUE,
+		)
+	),
+	'tac_date_of_acceptance' => array (
+		'label' => 'LLL:EXT:ajaxlogin/Resources/Private/Language/locallang_db.xml:fe_users.tac_date_of_acceptance',
+		'exclude' => true,
+		'config' => array (
+			'type' => 'input',
+			'size' => '8',
+			'eval' => 'datetime'
+		)
 	)
 );
 
 t3lib_div::loadTCA("fe_users");
 t3lib_extMgm::addTCAcolumns("fe_users", $tempColumns, 1);
-t3lib_extMgm::addToAllTCAtypes('fe_users', '--div--;Ajaxlogin,tx_ajaxlogin_verificationHash,tx_ajaxlogin_forgotHash,tx_ajaxlogin_forgotHashValid,tx_ajaxlogin_newUser,accepted_terms_and_conditions');
+t3lib_extMgm::addToAllTCAtypes('fe_users', '--div--;Ajaxlogin,tx_ajaxlogin_verificationHash,tx_ajaxlogin_forgotHash,tx_ajaxlogin_forgotHashValid,tx_ajaxlogin_newUser,accepted_terms_and_conditions,tac_version,tac_date_of_acceptance');
 
 $pagesTempColumns = array (
 	'tx_ajaxlogin_sectionreload' => array (

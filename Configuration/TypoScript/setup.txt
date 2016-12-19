@@ -106,6 +106,7 @@ plugin.tx_ajaxlogin {
 			blacklistDomains =
 		}
 
+		currentTermsAndConditionVersion = 0.1.0
 
 	}
 	persistence {

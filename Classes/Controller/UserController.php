@@ -443,6 +443,11 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
         // set new user flag for BE confirmation module
         $user->setNewUser(1);
 
+        // set terms and condition date of acceptance and version
+        $now = new \DateTime('now');
+        $user->setTacDateOfAcceptance($now);
+        $user->setTacVersion($this->settings['currentTermsAndConditionVersion']);
+
         $this->userRepository->add($user);
         $this->userRepository->_persistAll();
 
