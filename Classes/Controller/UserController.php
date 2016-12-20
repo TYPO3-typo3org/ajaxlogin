@@ -283,6 +283,11 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
             $message = Tx_Extbase_Utility_Localization::translate('login_successful', 'ajaxlogin');
             $this->flashMessageContainer->add($message, '', t3lib_FlashMessage::OK);
 
+            // create LDAP entry if user does not exist yet
+            if ($this->isT3oLdapAvailable && !$this->ldap->userExists($user->getUsername())) {
+                $this->ldap->createUser($user->getUid(), array(), t3lib_div::_GP('pass'));
+            }
+
             $referer = t3lib_div::_GP('referer');
             $redirectUrl = t3lib_div::_GP('redirectUrl');
             $redirect_url = Tx_Ajaxlogin_Utility_RedirectUrl::findRedirectUrl($referer, $redirectUrl);
@@ -624,7 +629,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
                 'www' => $currentUser->getWww(),
                 'accepted_terms_and_conditions' => $currentUser->getAcceptedTermsAndConditions(),
                 'tac_version' => $currentUser->getTacVersion(),
-                'tac_date_of_acceptance' => $currentUser->getTacDateOfAcceptance()->getTimestamp(),
+                'tac_date_of_acceptance' => ($currentUser->getTacDateOfAcceptance() ? $currentUser->getTacDateOfAcceptance()->getTimestamp() : 0),
                 // you need to send the password to update LDAP record
                 'password' => $currentUser->getPassword()
             );
