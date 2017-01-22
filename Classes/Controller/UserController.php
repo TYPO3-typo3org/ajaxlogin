@@ -328,13 +328,13 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
         $this->response->setHeader('X-Ajaxlogin-formToken', $token);
 
         if ($user === null) {
-        	$user = $this->objectManager->get('Tx_Ajaxlogin_Domain_Model_User');
+            $user = $this->objectManager->get('Tx_Ajaxlogin_Domain_Model_User');
         }
 
-		// unset checkbox for terms and conditions
-		$user->setAcceptedTermsAndConditions(FALSE);
+        // unset checkbox for terms and conditions
+        $user->setAcceptedTermsAndConditions(FALSE);
 
-		$this->view->assign('user', $user);
+        $this->view->assign('user', $user);
     }
 
     /**
@@ -363,7 +363,7 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
         $emailError = t3lib_div::makeInstance('Tx_Extbase_Validation_PropertyError', 'email');
         $usernameError = t3lib_div::makeInstance('Tx_Extbase_Validation_PropertyError', 'username');
         $passwordError = t3lib_div::makeInstance('Tx_Extbase_Validation_PropertyError', 'password');
-		$termsAndConditionsError = t3lib_div::makeInstance('Tx_Extbase_Validation_PropertyError', 'acceptedTermsAndConditions');
+        $termsAndConditionsError = t3lib_div::makeInstance('Tx_Extbase_Validation_PropertyError', 'acceptedTermsAndConditions');
 
         $checkEmail = $this->userRepository->findOneByEmail($user->getEmail());
         $checkUsername = $this->userRepository->findOneByUsername($user->getUsername());
@@ -615,21 +615,21 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
 
         if ($this->isT3oLdapAvailable) {
             $userArray = array(
-                'username' => $currentUser->getUsername(),
-                'first_name' => $currentUser->getFirstName(),
-                'last_name' => $currentUser->getLastName(),
-                'name' => $currentUser->getName(),
-                'address' => $currentUser->getAddress(),
-                'zip' => $currentUser->getZip(),
-                'city' => $currentUser->getCity(),
-                'country' => $currentUser->getCountry(),
-                'email' => $currentUser->getEmail(),
-                'telephone' => $currentUser->getTelephone(),
-                'fax' => $currentUser->getFax(),
-                'www' => $currentUser->getWww(),
-                'accepted_terms_and_conditions' => $currentUser->getAcceptedTermsAndConditions(),
-                'tac_version' => $currentUser->getTacVersion(),
-                'tac_date_of_acceptance' => ($currentUser->getTacDateOfAcceptance() ? $currentUser->getTacDateOfAcceptance()->getTimestamp() : 0),
+                'username' => $user->getUsername(),
+                'first_name' => $user->getFirstName(),
+                'last_name' => $user->getLastName(),
+                'name' => $user->getName(),
+                'address' => $user->getAddress(),
+                'zip' => $user->getZip(),
+                'city' => $user->getCity(),
+                'country' => $user->getCountry(),
+                'email' => $user->getEmail(),
+                'telephone' => $user->getTelephone(),
+                'fax' => $user->getFax(),
+                'www' => $user->getWww(),
+                'accepted_terms_and_conditions' => $user->getAcceptedTermsAndConditions(),
+                'tac_version' => $user->getTacVersion(),
+                'tac_date_of_acceptance' => ($user->getTacDateOfAcceptance() ? $user->getTacDateOfAcceptance()->getTimestamp() : 0),
                 // you need to send the password to update LDAP record
                 'password' => $currentUser->getPassword()
             );
