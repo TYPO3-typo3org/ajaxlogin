@@ -947,6 +947,26 @@ class Tx_Ajaxlogin_Controller_UserController extends Tx_Extbase_MVC_Controller_A
             $user->setPassword($saltedPW);
             $user->setForgotHash('');
             $user->setForgotHashValid(0);
+
+            if ($this->isT3oLdapAvailable === true) {
+                /**
+                 * Update LDAP Passwords for given user. Will create the account in LDAP
+                 * if no exists. Otherwise, only password will be updated.
+                 *
+                 * @var Tx_T3oLdap_Utility_PasswordUpdate $ldapPasswordUtility
+                 */
+                if ($this->ldap->userExists($user->getUsername()) === true) {
+                    $ldapPasswordUtility = t3lib_div::makeInstance('Tx_T3oLdap_Utility_PasswordUpdate');
+                    $ldapPasswordUtility->updatePassword($user->getUsername(), $password['new']);
+                } else {
+                    // Create the user record in LDAP
+                    $this->ldap->createUser(
+                        $user->getUid(),
+                        array(),
+                        $password['new']
+                    );
+                }
+            }
         }
     }
 
